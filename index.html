@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticket</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 40%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.5s;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        h3, h4, .center-text {
+            text-align: center;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #222222;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .info, .infos, .fare {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .fare {
+            font-weight: bold;
+            font-size: 16px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .rs {
+            color: #4CAF50;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px dashed #999;
+            margin: 10px 0;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="form-container">
+    <h3>Enter Route Details</h3>
+    <input type="text" id="from" placeholder="From">
+    <input type="text" id="to" placeholder="To">
+    <input type="number" id="passengers" placeholder="Number of Passengers" min="1">
+    <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+    <input type="number" id="fare" placeholder="Fare per Ticket" min="0">
+    <button onclick="generateTicket()">Generate Ticket</button>
+</div>
+
+
+<div class="container hide" id="ticket-container">
+    <h3>TamilNadu Govt Transport (Coimbatore) Ltd</h3>
+    <h4>Tirupur-2 DEPOT</h4>
+    <div class="info">
+        <p id="date"></p>
+        <p id="time"></p>
+        <p id="wb-number"></p>
+    </div>
+    <div class="info">
+        <p>39N0D31</p>
+        <p>97108</p>
+        <p>T97108ETWN-ORD</p>
+    </div>
+    <div class="infos center">
+        <p>T No: <span class="highlight">050309</span></p>
+        <p>CASH GENERAL</p>
+        <p>TOWN ORDINARY</p>
+    </div>
+    <hr>
+    <div class="infos center">
+        <p id="route" class="center-text"></p>
+    </div>
+    <div class="fare">
+        <p id="fare-details"></p>
+        <p class="rs">Rs: <span id="total-fare"></span></p>
+    </div>
+    <hr>
+    <p class="center-text">** As per Rules and regulations **</p>
+</div>
+
+<script>
+    function displayDateTime() {
+        const now = new Date();
+        document.getElementById("date").innerText = now.toLocaleDateString();
+        document.getElementById("time").innerText = now.toLocaleTimeString();
+    }
+
+    function getRandomWB() {
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById("wb-number").innerText = `WB ${randomNum}`;
+    }
+
+    function generateTicket() {
+        const from = document.getElementById("from").value.trim();
+        const to = document.getElementById("to").value.trim();
+        const passengers = parseInt(document.getElementById("passengers").value);
+        const gender = document.getElementById("gender").value;
+        const fare = parseFloat(document.getElementById("fare").value);
+
+        if (!from || !to || isNaN(passengers) || passengers <= 0 || isNaN(fare)) {
+            alert("Please fill in all fields correctly.");
+            return;
+        }
+
+        let totalFare = (gender === "female") ? 0 : passengers * fare;
+
+        document.getElementById("route").innerText = `${from} ➝ ${to}`;
+        document.getElementById("fare-details").innerText = `MALE(S): ${passengers} * ${fare.toFixed(2)} = Rs ${totalFare.toFixed(2)}`;
+        document.getElementById("total-fare").innerText = totalFare.toFixed(2);
+
+
+        document.getElementById("form-container").classList.add("hide");
+        document.getElementById("ticket-container").classList.remove("hide");
+
+        displayDateTime();
+        getRandomWB();
+    }
+</script>
+
+</body>
+</html>
